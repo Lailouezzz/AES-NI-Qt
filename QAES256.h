@@ -14,7 +14,7 @@
 
 class QAES256 : public QObject
 {
-
+	Q_OBJECT
 public:
 
 	enum AESMode
