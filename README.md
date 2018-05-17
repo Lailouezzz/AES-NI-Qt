@@ -82,7 +82,7 @@ void QAES256::removePadding(QByteArray& data)
 }								// This function remove this |1|0|0|0|0|0| for make : MyDatatest
 ```
 
-#### Encryption example
+#### Encryption/Decryption example
 
 Take the example with the comments that explains the function for the ECB mode:
 
@@ -108,4 +108,12 @@ qDebug() << "With padding : " << dataD;
 
 aes.removePadding(dataD); // Remove padding
 qDebug() << "Without padding : " << dataD;
+```
+
+OUTPUT :
+
+```
+Cipher data :  "\x97^\xBD\x7F\x19}\x13]\bhx_\x96\xB3\xC8k"
+With padding :  "My secret data\x01\x00"
+Without padding :  "My secret data"
 ```
