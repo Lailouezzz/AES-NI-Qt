@@ -4,6 +4,20 @@
 #include <QtCore>
 #include "QAES.h"
 
+#define CAST_M128I(x) reinterpret_cast<__m128i*>(x)
+#define CONSTCAST_M128I(x) reinterpret_cast<const __m128i*>(x)
+#define CAST_UINT8(x) reinterpret_cast<quint8*>(x)
+#define CONSTCAST_UINT8(x) reinterpret_cast<const quint8*>(x)
+#define CAST_CHAR8(x) reinterpret_cast<char*>(x)
+#define CONSTCAST_CHAR8(x) reinterpret_cast<const char*>(x)
+
+
+enum AESMode
+{
+	ECB,
+	CBC
+};
+constexpr static int AES_BLOCK_SIZE = 16;
 
 class QAES256 : public QObject
 {
