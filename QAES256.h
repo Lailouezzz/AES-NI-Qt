@@ -1,4 +1,5 @@
-#pragma once
+#ifndef QAES256_HEADER
+#define QAES256_HEADER
 #include <type_traits>
 #include <QtCore>
 #include "QAES.h"
@@ -65,3 +66,4 @@ private:
 	}
 
 };
+#endif
