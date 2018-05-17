@@ -37,7 +37,8 @@ The iv must be set before encrypt loop or decrypt loop.
 ```cpp
 void reset()
 ```
-ALWAY reset after encrypt loop or decrypt loop
+
+ALWAY reset after encrypt loop or decrypt loop.
 
 ```cpp
 void setMode(const AESMode& mode) { m_encryptMode = mode; }
@@ -51,5 +52,60 @@ AESMode getMode() { return m_encryptMode; }
 
 Return the actual mode.
 
+```cpp
+QByteArray encrypt(QByteArray data);
+```
+
+Return the contents of data encrypted.
+
+```cpp
+QByteArray encryptFinal();
+```
+
+Return the last block with the padding. (my padding method is : {myData}, 1, 0, 0... with this method it's easy to remove the padding)
+
+```cpp
+QByteArray decrypt(QByteArray data);
+```
+
+Return the contents of data decrypted.
+
+```cpp
+void removePadding(QByteArray& data);
+```
+
+This function remove the padding of data, definition : 
+```cpp
+void QAES256::removePadding(QByteArray& data)
+{																										//   1 and 0 of the encryptFinal function
+	data.truncate(data.lastIndexOf(1)); // for remove padding ex if the last block is : |M|y|D|a|t|a|t|e|s|t|1|0|0|0|0|0|
+}																			   // This function remove this |1|0|0|0|0|0| for make : MyDatatest
+```
+
 #### Encryption example
 
+Take the example with the comments that explains the function for the ECB mode:
+
+```cpp
+QByteArray userKey("MyKey"); // Create key
+
+// hash key for getting 256 bits key
+QAES256 aes(QAES256::ECB, QCryptographicHash::hash(userKey, QCryptographicHash::Sha256));
+
+																						  // The data to encrypt
+QByteArray myData("My secret data");
+QByteArray dataE = aes.encrypt(myData); // Encrypt data
+dataE.push_back(aes.encryptFinal()); // Finish the encrypt (add padding and the last block)
+
+qDebug() << "Cipher data : " << dataE;
+
+aes.reset(); // Reset cipher
+QByteArray dataD = aes.decrypt(dataE); // Decrypt the crypted data
+
+
+qDebug() << "With padding : " << dataD;
+
+
+aes.removePadding(dataD); // Remove padding
+qDebug() << "Without padding : " << dataD;
+```
