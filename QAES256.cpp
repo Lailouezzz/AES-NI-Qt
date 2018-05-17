@@ -57,7 +57,7 @@ QByteArray QAES256::encrypt(QByteArray data)
 			break;
 		}
 		// Load state
-		__m128i bufState = _mm_load_si128(CAST_M128I(data.data() + i));
+		__m128i bufState = _mm_loadu_si128(CAST_M128I(data.data() + i));
 		switch (m_encryptMode)
 		{
 		case ECB:
@@ -65,13 +65,11 @@ QByteArray QAES256::encrypt(QByteArray data)
 			retData.insert(i, CAST_CHAR8(&bufState), sizeof(bufState));
 			break;
 		case CBC:
-		{
 			bufState = _mm_xor_si128(bufState, m_currentIv);
 			cipher(bufState);
-			m_currentIv = _mm_load_si128(&bufState);
+			m_currentIv = _mm_loadu_si128(&bufState);
 			retData.insert(i, CAST_CHAR8(&bufState), sizeof(bufState));
-		}
-		break;
+			break;
 		default:
 			break;
 		}
@@ -119,7 +117,7 @@ QByteArray QAES256::decrypt(QByteArray data)
 			break;
 		}
 		// Load state
-		__m128i bufState = _mm_load_si128(CAST_M128I(data.data() + i));
+		__m128i bufState = _mm_loadu_si128(CAST_M128I(data.data() + i));
 		switch (m_encryptMode)
 		{
 		case ECB:
