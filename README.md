@@ -77,7 +77,7 @@ void removePadding(QByteArray& data);
 This function remove the padding of data, definition : 
 ```cpp
 void QAES256::removePadding(QByteArray& data)
-{																									//   1 and 0s of the encryptFinal function
+{										//   1 and 0s of the encryptFinal function
 	data.truncate(data.lastIndexOf(1)); // for remove padding ex if the last block is : |M|y|D|a|t|a|t|e|s|t|1|0|0|0|0|0|
 }								// This function remove this |1|0|0|0|0|0| for make : MyDatatest
 ```
