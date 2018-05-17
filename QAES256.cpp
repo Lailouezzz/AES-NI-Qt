@@ -147,7 +147,7 @@ void QAES256::removePadding(QByteArray& data)
 	data.truncate(data.lastIndexOf(1)); // for remove padding ex if the last block is : |M|y|D|a|t|a|t|e|s|t|1|0|0|0|0|0|
 }																			   // This function remove this |1|0|0|0|0|0| for make : MyDatatest
 
-__m128i QAES256::aes_128_key_expansion(__m128i key, __m128i key_with_rcon)
+__m128i QAES256::aes_128_key_expansion(__m128i key, __m128i key_with_rcon) const
 {
 	key_with_rcon = _mm_shuffle_epi32(key_with_rcon, _MM_SHUFFLE(3, 3, 3, 3));
 	key = _mm_xor_si128(key, _mm_slli_si128(key, 4));
@@ -156,7 +156,7 @@ __m128i QAES256::aes_128_key_expansion(__m128i key, __m128i key_with_rcon)
 	return _mm_xor_si128(key, key_with_rcon);
 }
 
-__m128i QAES256::aes_256_key_expansion(__m128i key, __m128i key2)
+__m128i QAES256::aes_256_key_expansion(__m128i key, __m128i key2) const
 {
 	__m128i key_with_rcon = _mm_aeskeygenassist_si128(key2, 0x00);
 
