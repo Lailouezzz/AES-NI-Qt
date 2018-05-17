@@ -117,3 +117,39 @@ Cipher data :  "\x97^\xBD\x7F\x19}\x13]\bhx_\x96\xB3\xC8k"
 With padding :  "My secret data\x01\x00"
 Without padding :  "My secret data"
 ```
+
+Example with CBC mode :
+```cpp
+QByteArray userKey("MyKey"); // Create key
+QByteArray userIv("My IV can be random");
+
+QAES256 aes(QAES256::CBC, QCryptographicHash::hash(userKey, QCryptographicHash::Sha256)); // hash key for getting 256 bits key
+aes.setIv(QCryptographicHash::hash(userIv, QCryptographicHash::Md5)); // Hash md5 return 128 bits value
+
+																	  // The data to encrypt
+QByteArray myData("My secret data");
+QByteArray dataE = aes.encrypt(myData); // Encrypt data
+dataE.push_back(aes.encryptFinal()); // Finish the encrypt (add padding and the last block)
+
+qDebug() << "Cipher data : " << dataE;
+
+aes.reset(); // Reset cipher
+aes.setIv(QCryptographicHash::hash(userIv, QCryptographicHash::Md5)); // /!\ re-set IV because he is modified when encrypting
+QByteArray dataD = aes.decrypt(dataE); // Decrypt the crypted data
+
+
+qDebug() << "With padding : " << dataD;
+
+
+aes.removePadding(dataD); // Remove padding
+qDebug() << "Without padding : " << dataD;
+```
+
+OUTPUT :
+```
+Cipher data :  "\x0E\b\x8C\xB0j\x1B\xDEo?\x9E\x84 \"_\x96i"
+With padding :  "My secret data\x01\x00"
+Without padding :  "My secret data"
+```
+
+Noted that "Cipher data" is different between the ECB mode and CBC (look why on wikipedia)
