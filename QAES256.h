@@ -14,13 +14,14 @@
 
 class QAES256 : public QObject
 {
-	Q_OBJECT
+
 public:
 
 	enum AESMode
 	{
 		ECB,
-		CBC
+		CBC,
+		PCBC
 	};
 	constexpr static int AES_BLOCK_SIZE = 16;
 	static constexpr int AES_KEY_SIZE = 256;

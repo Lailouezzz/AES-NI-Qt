@@ -70,6 +70,15 @@ QByteArray QAES256::encrypt(QByteArray data)
 			m_currentIv = _mm_loadu_si128(&bufState);
 			retData.insert(i, CAST_CHAR8(&bufState), sizeof(bufState));
 			break;
+		case PCBC:
+		{
+			__m128i buf = bufState;
+			bufState = _mm_xor_si128(bufState, m_currentIv);
+			cipher(bufState);
+			retData.insert(i, CAST_CHAR8(&bufState), sizeof(bufState));
+			m_currentIv = _mm_xor_si128(bufState, buf);
+		}
+			break;
 		default:
 			break;
 		}
@@ -131,6 +140,15 @@ QByteArray QAES256::decrypt(QByteArray data)
 			invCipher(bufState);
 			bufState = _mm_xor_si128(bufState, tempState);
 			retData.insert(i, CAST_CHAR8(&bufState), sizeof(bufState));
+		}
+		break;
+		case PCBC:
+		{
+			__m128i buf = bufState;
+			invCipher(bufState);
+			bufState = _mm_xor_si128(bufState, m_currentIv);
+			retData.insert(i, CAST_CHAR8(&bufState), sizeof(bufState));
+			m_currentIv = _mm_xor_si128(bufState, buf);
 		}
 		break;
 		default:
