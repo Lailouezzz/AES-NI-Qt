@@ -118,7 +118,7 @@ With padding :  "My secret data\x01\x00"
 Without padding :  "My secret data"
 ```
 
-Example with CBC mode :
+Example with CBC (or PCBC if you want) mode :
 ```cpp
 QByteArray userKey("MyKey"); // Create key
 QByteArray userIv("My IV can be random");
