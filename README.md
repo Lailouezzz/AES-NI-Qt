@@ -13,7 +13,7 @@ To create QAES256 object you have 2 way :
 QAES256(const AESMode& encryptMode);
 ```
 
-`AESMode` is enum at this time, ECB and CBC (you can learn that on wikipedia) mode are implemented.
+`AESMode` is enum at this time, ECB, CBC and PCBC (you can learn that on wikipedia) mode are implemented.
 
 ```cpp
 QAES256(const AESMode& encryptMode, const QByteArray& userKey);
@@ -31,7 +31,7 @@ The `QByteArray` is the user key who go expand, `userKey.size() == QAES256::AES_
 bool setIv(const QByteArray& iv);
 ```
 
-The `QByteArray` is the initialize vector (at this time used only by the CBC mode), don't use the same iv always.
+The `QByteArray` is the initialize vector (at this time used only by the CBC and PCBC mode), don't use the same iv always.
 The iv must be set before encrypt loop or decrypt loop.
 
 ```cpp
@@ -44,7 +44,7 @@ ALWAY reset after encrypt loop or decrypt loop.
 void setMode(const AESMode& mode) { m_encryptMode = mode; }
 ```
 
-`AESMode` is enum at this time, ECB and CBC (you can learn that on wikipedia) mode are implemented.
+`AESMode` is enum at this time, ECB, CBC and PCBC (you can learn that on wikipedia) mode are implemented.
 
 ```cpp
 AESMode getMode() { return m_encryptMode; }
